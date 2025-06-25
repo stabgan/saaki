@@ -67,6 +67,13 @@ The project is divided into the following phases:
 
 A detailed project plan can be found in `plan.md`.
 
+## Tests
+
+Run the test suite with:
+```bash
+pytest
+```
+
 ## Changelog
 
 All changes to the project are documented in `Changelog.md`.
