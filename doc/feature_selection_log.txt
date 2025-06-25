@@ -1,0 +1,38 @@
+Columns dropped due to >95% missing values:
+- admission_height
+- rdw_slope
+- rdw_auc
+- sodium_median
+- sodium_iqr
+- sodium_rng
+- sodium_first
+- sodium_last
+- sodium_delta
+- sodium_slope
+- sodium_n
+- sodium_auc
+- totalbilirubin_median
+- totalbilirubin_iqr
+- totalbilirubin_rng
+- totalbilirubin_first
+- totalbilirubin_last
+- totalbilirubin_delta
+- totalbilirubin_slope
+- totalbilirubin_n
+- totalbilirubin_auc
+- wbc_median
+- wbc_iqr
+- wbc_rng
+- wbc_first
+- wbc_last
+- wbc_delta
+- wbc_slope
+- wbc_n
+- wbc_auc
+- bmi
+
+New DataFrame shape: (11661, 325)
+
+Columns dropped due to 100% missing values:
+- wbc_slope
+- wbc_auc
