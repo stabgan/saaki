@@ -1,5 +1,5 @@
 Context of this project :
-We are working on analysing and creating data science solutions. Specifically we have extracted patients from MIMIC - IV v3.1 dataset where our cohort has sepsis associated with Acute Kidney Injury (SA-AKI). We have extracted many features from the dataset of those patient including 24 hour aggregations of many time series data. The below 2 columns are only representing the future outcomes -
+We are working on analysing and creating data science solutions. Specifically we have extracted patients from MIMIC - IV v3.1 dataset where our cohort has sepsis associated with Acute Kidney Injury (SA-AKI). We have extracted many features from the dataset of those patients including 24 hour aggregations of many time series data. The below 2 columns are only representing the future outcomes -
 
 | Column | Meaning | Unit |
 |--------|---------|------|
