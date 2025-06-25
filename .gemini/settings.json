@@ -1,0 +1,36 @@
+{
+  // "mcpServers": {
+    // "neo4j": {
+    //   "command": "uvx",
+    //   "args": [
+    //     "mcp-neo4j-cypher",
+    //     "--db-url", "bolt://localhost:7687"
+    //   ]
+    // },
+    // "postgres": {
+    //   "command": "docker",
+    //   "args": [
+    //     "run",
+    //     "-i",
+    //     "--rm",
+    //     "-e",
+    //     "DATABASE_URI",
+    //     "crystaldba/postgres-mcp",
+    //     "--access-mode=unrestricted"
+    //   ],
+    //   "env": {
+    //     "DATABASE_URI": "postgresql://postgres:1234@localhost:5500/postgres"
+    //   }
+    // }
+  //   "duckdb": {
+  //     "command": "uvx",
+  //     "args": [
+  //       "mcp-server-motherduck",
+  //       "--db-path",
+  //       "F:/mimic.db"
+  //     ]
+  //   }
+  // },
+   "usageStatisticsEnabled": false
+  //  "sandbox": "docker"
+}
