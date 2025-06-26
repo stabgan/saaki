@@ -9,7 +9,7 @@ DATA_PATH = 'data/mimic_saaki_final.csv'
 def load_data(path=DATA_PATH):
     df = pd.read_csv(path)
     y = df['event_observed'].astype(int)
-    X = df.drop(columns=['event_observed'])
+    X = df.drop(columns=['event_observed','time_to_event_hrs'])
     # drop columns missing >99%
     missing = X.isnull().mean()
     X = X.drop(columns=missing[missing > 0.99].index)

@@ -1,0 +1,89 @@
+# Core Data Science Libraries
+pandas
+numpy
+scipy
+scikit-learn
+
+# Statistical Analysis
+statsmodels
+pingouin
+lifelines
+
+# Survival Analysis
+scikit-survival
+pysurvival
+
+# Machine Learning & Deep Learning
+xgboost
+lightgbm
+catboost
+tensorflow
+torch
+transformers
+
+# Bayesian Methods
+pymc
+arviz
+numpyro
+
+# Plotting & Visualization
+matplotlib
+seaborn
+plotly
+bokeh
+
+# Medical/Clinical Data Processing
+openpyxl
+xlrd
+
+# Feature Engineering & Selection
+feature-engine
+boruta
+mlxtend
+
+# Model Interpretation & Explainability
+shap
+lime
+eli5
+
+# Cross-validation & Model Selection
+optuna
+hyperopt
+skopt
+
+# Utilities
+tqdm
+joblib
+pickle5
+
+# Testing & Quality
+pytest
+black
+flake8
+
+# Documentation
+jupyter
+notebook
+ipywidgets
+
+# Statistical Tests & Diagnostics
+scipy
+researchpy
+
+# Time Series Analysis
+stumpy
+tslearn
+
+# Calibration & Evaluation
+reliability-diagrams
+netcal
+
+# Data Quality & Profiling
+pandas-profiling
+great-expectations
+
+# Imbalanced Learning
+imbalanced-learn
+
+# Preprocessing
+category-encoders 
