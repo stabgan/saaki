@@ -5,3 +5,8 @@
 # v1.0.1
 - Tested multiple models (CatBoost, LightGBM, XGBoost) with hyperparameter tuning and cross-validation.
 - Best AUROC remained around 0.80; unable to reach target 0.85 yet.
+
+# v1.0.2
+- Added Yeo-Johnson power transformation and one-hot encoding in preprocessing.
+- Implemented stacking ensemble (XGBoost + LightGBM). Holdout AUROC reached
+  0.771, still below desired 0.85 target.

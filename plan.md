@@ -8,3 +8,8 @@
 
 - Attempted CatBoost, LightGBM, and XGBoost models with increased iterations and cross-validation. Best AUROC ~0.80.
 - Need feature engineering (e.g., missingness indicators, interaction terms) to potentially reach ≥0.85.
+
+- New step: add numeric power transformations (Yeo-Johnson) to normalise skewed
+  distributions and one-hot encode categorical fields.
+- Build a stacking ensemble combining XGBoost and LightGBM with an LGBM
+  meta-classifier. Evaluate on holdout AUROC aiming for improvement beyond 0.80.
