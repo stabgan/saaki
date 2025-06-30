@@ -8,3 +8,4 @@
 
 - Attempted CatBoost, LightGBM, and XGBoost models with increased iterations and cross-validation. Best AUROC ~0.80.
 - Need feature engineering (e.g., missingness indicators, interaction terms) to potentially reach ≥0.85.
+- Added logistic regression baseline using a column transformer and cross-validation to benchmark linear model performance.
