@@ -1,7 +1,12 @@
 import pandas as pd
 from catboost import CatBoostClassifier, Pool
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import roc_auc_score
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.impute import SimpleImputer
 
 # load data
 DATA_PATH = 'data/mimic_saaki_final.csv'
@@ -40,5 +45,54 @@ def train_test_auc():
     auc = roc_auc_score(y_test, pred)
     print(f'Test AUROC: {auc:.3f}')
 
+def logistic_cv_auc(cv: int = 3):
+    """Run logistic regression with cross-validation and report AUROC."""
+    X, y, cat_cols = load_data()
+    num_cols = [c for c in X.columns if c not in cat_cols]
+
+    preprocessor = ColumnTransformer(
+        [
+            (
+                "num",
+                Pipeline(
+                    [
+                        ("imputer", SimpleImputer(strategy="median")),
+                        ("scale", StandardScaler()),
+                    ]
+                ),
+                num_cols,
+            ),
+            (
+                "cat",
+                Pipeline(
+                    [
+                        ("imputer", SimpleImputer(strategy="most_frequent")),
+                        (
+                            "onehot",
+                            OneHotEncoder(handle_unknown="ignore"),
+                        ),
+                    ]
+                ),
+                cat_cols,
+            ),
+        ]
+    )
+
+    clf = Pipeline(
+        [
+            ("preprocess", preprocessor),
+            (
+                "model",
+                LogisticRegression(max_iter=1000, n_jobs=-1, solver="lbfgs"),
+            ),
+        ]
+    )
+
+    scores = cross_val_score(clf, X, y, cv=cv, scoring="roc_auc", n_jobs=-1)
+    print(
+        f"Logistic CV AUROC: {scores.mean():.3f} \u00b1 {scores.std():.3f}"
+    )
+
 if __name__ == '__main__':
+    logistic_cv_auc()
     train_test_auc()
