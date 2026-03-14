@@ -1,3 +1,14 @@
+# v1.3.0
+- Modernized `saaki_model.py`:
+  - Resolved data path relative to script location (`pathlib.Path`) so the project works regardless of working directory
+  - Added `FileNotFoundError` with helpful message when data file is missing
+  - Added structured logging (`logging` module) replacing bare `print()` calls
+  - Added module docstring, function docstrings, and type hints
+  - Functions now return AUROC values for programmatic use
+  - Reordered imports per PEP 8 (stdlib → third-party → local)
+- Expanded `.gitignore` to cover `__pycache__/`, `catboost_info/`, IDE files, OS files
+- Verified all sklearn / CatBoost / pandas APIs against latest docs via Context7 — no deprecated calls found
+
 # v1.2.0
 - Fixed ID column leakage: `stay_id`, `subject_id`, `hadm_id` now explicitly dropped before training
 - Fixed NaN handling in categoricals: `.fillna('NA').astype(str)` instead of `.astype(str).fillna('NA')` which silently converted NaN to literal string 'nan'

@@ -25,7 +25,7 @@ Each time-series feature includes 9 statistical aggregations (first, last, media
 
 ## Methodology
 
-**Binary classification** on `event_observed` (1 = in-hospital death, 0 = survived/censored), with `time_to_event_hrs` available for survival analysis.
+Binary classification on `event_observed` (1 = in-hospital death, 0 = survived/censored), with `time_to_event_hrs` available for future survival analysis.
 
 Pipeline:
 1. Drop ID columns (`stay_id`, `subject_id`, `hadm_id`) to prevent data leakage
@@ -45,8 +45,6 @@ Pipeline:
 | XGBoost | ~0.80 | Competitive with CatBoost |
 | LightGBM | ~0.80 | Fastest training time |
 | Logistic Regression | ~0.75 | Linear baseline (3-fold CV) |
-
-Targets: AUROC ≥ 0.82 · Brier score ≤ 0.06 · C-index ≥ 0.82
 
 ---
 
@@ -74,7 +72,6 @@ saaki/
 │   ├── mimic_saaki_final.csv
 │   └── mimic_saaki_final.xlsx
 ├── doc/                    # Data dictionary (356 columns)
-├── catboost_info/          # CatBoost training logs
 ├── requirements.txt        # Python dependencies
 ├── AGENTS.md               # Project context & methodology
 ├── plan.md                 # Roadmap
@@ -83,7 +80,7 @@ saaki/
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
 | | Category | Tools |
 |---|---|---|
@@ -99,7 +96,7 @@ saaki/
 
 ## Dataset
 
-Uses [MIMIC-IV v3.1](https://physionet.org/content/mimiciv/), which requires **credentialed access** through [PhysioNet](https://physionet.org/):
+Uses [MIMIC-IV v3.1](https://physionet.org/content/mimiciv/), which requires credentialed access through [PhysioNet](https://physionet.org/):
 
 1. Complete CITI training for human research data
 2. Sign the MIMIC-IV data use agreement
@@ -109,22 +106,11 @@ Data files are **not included** in this repository.
 
 ---
 
-## Known Issues
+## ⚠️ Known Issues
 
-- AUROC plateaus around 0.80 with current features — feature engineering (missingness indicators, interaction terms) and ensemble stacking are planned next steps
+- AUROC plateaus around 0.80 — feature engineering (missingness indicators, interaction terms) and ensemble stacking are planned
 - `requirements.txt` includes libraries for planned future work (survival analysis, explainability) not yet used in the main pipeline
 - Survival modelling (Cox PH, DeepSurv) not yet implemented
-
----
-
-## Roadmap
-
-- [ ] Feature engineering — missingness indicators, interaction terms
-- [ ] Ensemble stacking — CatBoost + LightGBM + XGBoost
-- [ ] Survival models — Cox PH (elastic-net), DeepSurv, AFT
-- [ ] SHAP-based feature importance & clinical interpretability
-- [ ] Fairness audits — AUROC parity across gender/ethnicity (Δ ≤ 0.05)
-- [ ] Calibration analysis — Brier score, reliability diagrams
 
 ---
 
