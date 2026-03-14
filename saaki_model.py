@@ -11,17 +11,28 @@ from sklearn.impute import SimpleImputer
 # load data
 DATA_PATH = 'data/mimic_saaki_final.csv'
 
+# ID columns that must be excluded to prevent data leakage
+ID_COLS = ['stay_id', 'subject_id', 'hadm_id']
+
+
 def load_data(path=DATA_PATH):
     df = pd.read_csv(path)
     y = df['event_observed'].astype(int)
-    X = df.drop(columns=['event_observed','time_to_event_hrs'])
-    # drop columns missing >99%
+    X = df.drop(columns=['event_observed', 'time_to_event_hrs'])
+
+    # Drop identifier columns to prevent data leakage
+    X = X.drop(columns=[c for c in ID_COLS if c in X.columns])
+
+    # Drop columns missing >99%
     missing = X.isnull().mean()
     X = X.drop(columns=missing[missing > 0.99].index)
+
     cat_cols = X.select_dtypes(include=['object']).columns.tolist()
     for c in cat_cols:
-        X[c] = X[c].astype(str).fillna('NA')
+        # fillna first, then convert to str — avoids NaN becoming literal 'nan'
+        X[c] = X[c].fillna('NA').astype(str)
     return X, y, cat_cols
+
 
 def train_test_auc():
     X, y, cat_cols = load_data()
@@ -44,6 +55,7 @@ def train_test_auc():
     pred = model.predict_proba(test_pool)[:, 1]
     auc = roc_auc_score(y_test, pred)
     print(f'Test AUROC: {auc:.3f}')
+
 
 def logistic_cv_auc(cv: int = 3):
     """Run logistic regression with cross-validation and report AUROC."""
@@ -92,6 +104,7 @@ def logistic_cv_auc(cv: int = 3):
     print(
         f"Logistic CV AUROC: {scores.mean():.3f} \u00b1 {scores.std():.3f}"
     )
+
 
 if __name__ == '__main__':
     logistic_cv_auc()
