@@ -1,43 +1,31 @@
-# 🩺 Saaki — SA-AKI Mortality Prediction
-
-Predicting in-hospital mortality for ICU patients with Sepsis-Associated Acute Kidney Injury using MIMIC-IV.
+# �� Saaki — SA-AKI Mortality Prediction
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-3776AB?logo=python&logoColor=white)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![MIMIC-IV v3.1](https://img.shields.io/badge/data-MIMIC--IV%20v3.1-blue.svg)](https://physionet.org/content/mimiciv/)
 
+Predicting in-hospital mortality for ICU patients with **Sepsis-Associated Acute Kidney Injury (SA-AKI)** using machine learning and survival analysis on the [MIMIC-IV v3.1](https://physionet.org/content/mimiciv/) clinical database.
+
 ---
 
-## What It Does
+## Why This Matters
 
-SA-AKI (Sepsis-Associated Acute Kidney Injury) is one of the deadliest complications in critical care. This project builds ML models to identify high-risk patients early, using **356 clinical features** extracted from the first 24 hours of ICU stay:
+SA-AKI is one of the most lethal complications in critical care — sepsis patients who develop acute kidney injury face significantly elevated mortality risk. Early identification of high-risk patients can guide timely interventions such as renal-replacement therapy, vasopressor optimization, and fluid management.
 
-- Vital signs (HR, BP, SpO₂, temperature, respiratory rate)
-- Laboratory panels (creatinine, lactate, bilirubin, CBC, coagulation, ABG)
-- Severity scores (APACHE III, SOFA — 6 organ-specific components)
-- Comorbidities (17 Charlson flags)
-- Therapies (mechanical ventilation, vasopressors, RRT)
-- Fluid balance & urine output
+This project builds predictive models from **356 clinical features** extracted from the first 24 hours of ICU stay, covering:
+
+- **Vital signs** — heart rate, blood pressure, SpO₂, temperature, respiratory rate
+- **Laboratory panels** — creatinine, lactate, bilirubin, CBC, coagulation, arterial blood gas
+- **Severity scores** — APACHE III, SOFA (6 organ-specific components)
+- **Comorbidities** — 17 Charlson comorbidity flags
+- **Therapies** — mechanical ventilation, vasopressors, renal-replacement therapy
+- **Fluid balance & urine output**
 
 Each time-series feature includes 9 statistical aggregations (first, last, median, IQR, range, delta, AUC, slope, count) over the 24-hour window.
 
 ---
 
-## Methodology
-
-**Binary classification** on `event_observed` (1 = in-hospital death, 0 = survived/censored), with `time_to_event_hrs` available for survival analysis.
-
-Pipeline:
-1. Drop ID columns (`stay_id`, `subject_id`, `hadm_id`) to prevent data leakage
-2. Drop features with >99% missing values
-3. Categorical encoding — CatBoost native handling / OneHot for sklearn pipelines
-4. Median imputation for numeric features
-5. Stratified train/test split (80/20, seed=42)
-6. Cross-validated AUROC evaluation
-
----
-
-## Results
+## Model Performance
 
 | Model | AUROC | Notes |
 |---|---|---|
@@ -46,7 +34,7 @@ Pipeline:
 | LightGBM | ~0.80 | Fastest training time |
 | Logistic Regression | ~0.75 | Linear baseline (3-fold CV) |
 
-Targets: AUROC ≥ 0.82 · Brier score ≤ 0.06 · C-index ≥ 0.82
+**Targets:** AUROC ≥ 0.82 · Brier score ≤ 0.06 · C-index ≥ 0.82
 
 ---
 
@@ -59,9 +47,9 @@ pip install -r requirements.txt
 python saaki_model.py
 ```
 
-Runs logistic regression (cross-validated) followed by CatBoost training, reports AUROC on a stratified 80/20 test split.
+The script runs logistic regression (cross-validated) followed by CatBoost training and reports AUROC on a stratified 80/20 test split.
 
-> **Note:** Requires the MIMIC-IV dataset in `data/`. See [Dataset](#dataset) below.
+> **Note:** You need the MIMIC-IV dataset placed in `data/` — see [Dataset](#dataset) below.
 
 ---
 
@@ -69,51 +57,57 @@ Runs logistic regression (cross-validated) followed by CatBoost training, report
 
 ```
 saaki/
-├── saaki_model.py          # Training & evaluation pipeline
-├── data/                   # MIMIC-IV SA-AKI cohort (PhysioNet access required)
+├── saaki_model.py               # Main training & evaluation pipeline
+├── data/                        # MIMIC-IV SA-AKI cohort (requires PhysioNet access)
 │   ├── mimic_saaki_final.csv
 │   └── mimic_saaki_final.xlsx
-├── doc/                    # Data dictionary (356 columns)
-├── catboost_info/          # CatBoost training logs
-├── requirements.txt        # Python dependencies
-├── AGENTS.md               # Project context & methodology
-├── plan.md                 # Roadmap
-└── changelog.md            # Version history
+├── doc/                         # Data dictionary (356 columns documented)
+│   └── mimic_saaki_final_data_dictionary.md
+├── catboost_info/               # CatBoost training logs
+├── AGENTS.md                    # Full project context & methodology
+├── plan.md                      # Roadmap & next steps
+├── changelog.md                 # Version history
+└── requirements.txt             # Python dependencies
 ```
 
 ---
 
 ## Tech Stack
 
-| | Category | Tools |
-|---|---|---|
-| 🤖 | ML Models | CatBoost, XGBoost, LightGBM, scikit-learn |
-| 📊 | Survival Analysis | lifelines, scikit-survival |
-| 🧮 | Data Processing | pandas, NumPy, SciPy |
-| 🔍 | Explainability | SHAP, LIME |
-| ⚙️ | Optimization | Optuna |
-| 📈 | Visualization | matplotlib, seaborn, Plotly |
-| 🏥 | Clinical Data | MIMIC-IV v3.1 via PhysioNet |
+| Category | Libraries |
+|---|---|
+| **ML Models** | CatBoost, XGBoost, LightGBM, scikit-learn |
+| **Survival Analysis** | lifelines, scikit-survival |
+| **Data Processing** | pandas, NumPy, SciPy |
+| **Explainability** | SHAP, LIME |
+| **Optimization** | Optuna, Hyperopt |
+| **Visualization** | matplotlib, seaborn, Plotly |
+
+---
+
+## Methodology
+
+**Binary classification** — `event_observed` (1 = in-hospital death, 0 = survived/censored)
+**Survival analysis** — `time_to_event_hrs` with right-censoring
+
+Pipeline:
+1. Drop features with >99% missing values
+2. Categorical encoding (CatBoost native / OneHot for sklearn pipelines)
+3. Median imputation for numeric features
+4. Stratified train/test split (80/20, seed=42)
+5. Cross-validated AUROC evaluation
 
 ---
 
 ## Dataset
 
-Uses [MIMIC-IV v3.1](https://physionet.org/content/mimiciv/), which requires **credentialed access** through [PhysioNet](https://physionet.org/):
+This project uses the [MIMIC-IV v3.1](https://physionet.org/content/mimiciv/) database, which requires **credentialed access** through [PhysioNet](https://physionet.org/). You must:
 
 1. Complete CITI training for human research data
 2. Sign the MIMIC-IV data use agreement
-3. Place the processed cohort file in `data/`
+3. Download and place the processed cohort file in `data/`
 
-Data files are **not included** in this repository.
-
----
-
-## Known Issues
-
-- AUROC plateaus around 0.80 with current features — feature engineering (missingness indicators, interaction terms) and ensemble stacking are planned next steps
-- `requirements.txt` includes libraries for planned future work (survival analysis, explainability) not yet used in the main pipeline
-- Survival modelling (Cox PH, DeepSurv) not yet implemented
+The data files are **not included** in this repository.
 
 ---
 
@@ -125,6 +119,15 @@ Data files are **not included** in this repository.
 - [ ] SHAP-based feature importance & clinical interpretability
 - [ ] Fairness audits — AUROC parity across gender/ethnicity (Δ ≤ 0.05)
 - [ ] Calibration analysis — Brier score, reliability diagrams
+- [ ] Decision-curve analysis for net clinical benefit
+
+---
+
+## Known Issues
+
+- **ID columns not dropped:** `stay_id`, `subject_id`, and `hadm_id` are retained as features during training — these should be excluded to avoid data leakage.
+- **NaN handling in categoricals:** `.astype(str)` converts `NaN` to the string `'nan'` before `.fillna()` can act — missing categoricals are encoded as literal `'nan'` rather than `'NA'`.
+- **Dependency bloat:** `requirements.txt` includes packages not yet used in the current pipeline (PyTorch, TensorFlow, etc.) and some deprecated packages (`pandas-profiling` → `ydata-profiling`, `pickle5` built into Python 3.10+).
 
 ---
 
@@ -132,6 +135,8 @@ Data files are **not included** in this repository.
 
 MIT — see [LICENSE](LICENSE) for details.
 
+---
+
 ## Author
 
-Built by [Kaustabh Ganguly](https://github.com/stabgan)
+Built by [Kaustabh Ganguly](https://github.com/stabgan) ([@stabgan](https://github.com/stabgan))

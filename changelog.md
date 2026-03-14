@@ -1,9 +1,3 @@
-# v1.2.0
-- Fixed ID column leakage: `stay_id`, `subject_id`, `hadm_id` now explicitly dropped before training
-- Fixed NaN handling in categoricals: `.fillna('NA').astype(str)` instead of `.astype(str).fillna('NA')` which silently converted NaN to literal string 'nan'
-- Cleaned `requirements.txt`: removed deprecated `pickle5`, `pandas-profiling` (→ `ydata-profiling`), `pysurvival`, and unused heavy dependencies (TensorFlow, PyTorch, etc.)
-- Rewrote README.md with modern formatting, tech stack, known issues, and clear methodology section
-
 # v1.0.0
 - added plan.md and saaki_model.py for CatBoost-based binary classification.
 - Achieved Test AUROC: 0.794 on catboost
